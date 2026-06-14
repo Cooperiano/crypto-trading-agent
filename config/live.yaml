@@ -1,0 +1,85 @@
+# Live trading configuration - uses real Binance API
+trading:
+  mode: live
+  max_portfolio_pct_per_trade: 0.01
+  max_position_per_symbol_usdt: 100.0
+  daily_loss_limit_usdt: 50.0
+  stop_loss_pct: 0.05
+  tick_interval_seconds: 10.0
+  quote_currency: USDT
+
+binance:
+  testnet: true
+  use_testnet: true
+
+llm:
+  enabled: true
+  provider: ollama
+  base_url: "http://localhost:11434"
+  model: "llama3"
+  max_tokens: 2048
+  analysis_interval_seconds: 600.0
+  trading_mode: advisor
+  advisor_weight: 0.5
+
+market_data:
+  primary_source: binance
+  fallback_sources:
+    - coingecko
+  symbols:
+    - BTC/USDT
+    - ETH/USDT
+  min_volume_24h_usdt: 5000000.0
+  max_symbols: 5
+  update_interval_seconds: 1.0
+
+simulation:
+  enabled: false
+
+strategies:
+  trend_following:
+    enabled: true
+    trading_mode: advisor
+    params:
+      ema_fast: 12
+      ema_slow: 26
+      adx_period: 14
+      adx_threshold: 30.0
+      max_position_usdt: 50.0
+      cooldown_ticks: 30
+  mean_reversion:
+    enabled: true
+    trading_mode: advisor
+    params:
+      bb_period: 20
+      bb_std: 2.5
+      rsi_period: 14
+      rsi_oversold: 25.0
+      rsi_overbought: 75.0
+      max_position_usdt: 50.0
+      cooldown_ticks: 30
+  llm:
+    enabled: true
+    trading_mode: advisor
+    params:
+      min_confidence: 0.75
+      max_position_usdt: 50.0
+      analysis_interval_ticks: 180
+      trading_mode: advisor
+
+monitoring:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  dashboard_type: python
+
+security:
+  max_single_tx_usdt: 100.0
+  max_daily_spend_usdt: 500.0
+  injection_guard_enabled: true
+  simulation_before_send: true
+  circuit_breaker_enabled: true
+  max_consecutive_losses: 3
+  max_hourly_loss_pct: 0.03
+  min_amount_out_required: true
+  audit_log_enabled: true

@@ -1,0 +1,95 @@
+# Default configuration - paper trading with simulation
+trading:
+  mode: paper
+  max_portfolio_pct_per_trade: 0.02
+  max_position_per_symbol_usdt: 500.0
+  daily_loss_limit_usdt: 200.0
+  stop_loss_pct: 0.10
+  tick_interval_seconds: 5.0
+  quote_currency: USDT
+
+binance:
+  testnet: true
+  use_testnet: true
+
+llm:
+  enabled: false
+  provider: ollama
+  base_url: "http://localhost:11434"
+  model: "llama3"
+  max_tokens: 2048
+  analysis_interval_seconds: 300.0
+  trading_mode: hybrid
+  advisor_weight: 0.3
+
+market_data:
+  primary_source: binance
+  fallback_sources:
+    - coingecko
+    - yahoo
+  symbols:
+    - BTC/USDT
+    - ETH/USDT
+    - SOL/USDT
+  min_volume_24h_usdt: 1000000.0
+  max_symbols: 20
+  update_interval_seconds: 1.0
+
+simulation:
+  enabled: true
+  symbols:
+    - BTC/USDT
+    - ETH/USDT
+    - SOL/USDT
+  initial_prices:
+    BTC/USDT: 65000.0
+    ETH/USDT: 3500.0
+    SOL/USDT: 150.0
+
+strategies:
+  trend_following:
+    enabled: true
+    trading_mode: hybrid
+    params:
+      ema_fast: 12
+      ema_slow: 26
+      adx_period: 14
+      adx_threshold: 25.0
+      max_position_usdt: 200.0
+      cooldown_ticks: 10
+  mean_reversion:
+    enabled: true
+    trading_mode: hybrid
+    params:
+      bb_period: 20
+      bb_std: 2.0
+      rsi_period: 14
+      rsi_oversold: 30.0
+      rsi_overbought: 70.0
+      max_position_usdt: 200.0
+      cooldown_ticks: 15
+  llm:
+    enabled: false
+    trading_mode: advisor
+    params:
+      min_confidence: 0.6
+      max_position_usdt: 100.0
+      analysis_interval_ticks: 120
+      trading_mode: advisor
+
+monitoring:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  dashboard_type: python
+
+security:
+  max_single_tx_usdt: 500.0
+  max_daily_spend_usdt: 2000.0
+  injection_guard_enabled: true
+  simulation_before_send: true
+  circuit_breaker_enabled: true
+  max_consecutive_losses: 3
+  max_hourly_loss_pct: 0.05
+  min_amount_out_required: true
+  audit_log_enabled: true

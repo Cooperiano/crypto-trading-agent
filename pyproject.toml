@@ -1,0 +1,41 @@
+[project]
+name = "trading-agent"
+version = "0.1.0"
+description = "Modular async trading agent for cryptocurrency markets via Binance"
+requires-python = ">=3.11"
+dependencies = [
+    "ccxt>=4.4",
+    "aiohttp>=3.9",
+    "websockets>=12.0",
+    "pydantic>=2.6",
+    "pydantic-settings>=2.1",
+    "pyyaml>=6.0",
+    "structlog>=24.1",
+    "tenacity>=8.2",
+    "click>=8.1",
+    "rich>=13.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=4.1",
+    "ruff>=0.3",
+    "mypy>=1.8",
+]
+
+[project.scripts]
+trading-agent = "trading_agent.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
