@@ -103,3 +103,7 @@ This agent can place real orders against Binance in `live` mode. Before going li
 
 > Trading involves risk. This software is provided for educational and research purposes
 > and is **not** financial advice.
+
+## License
+
+[MIT](LICENSE).
